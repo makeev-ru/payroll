@@ -1,4 +1,5 @@
 package com.example.payroll.database;
+
 import com.example.payroll.domain.Employee;
 import com.example.payroll.repository.EmployeeRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -18,8 +19,8 @@ class LoadDatabase {
     CommandLineRunner loadEmployees() {
 
         return args -> {
-            repository.save(new Employee("Frodo", "Baggins", "ring bearer"));
-            repository.save(new Employee("Bilbo", "Baggins", "burglar"));
+            repository.save(new Employee("Frodo Baggins", "Developer", "Financial", 1500));
+            repository.save(new Employee("Bilbo Baggins", "Tester", "Travel", 2000));
         };
     }
 
