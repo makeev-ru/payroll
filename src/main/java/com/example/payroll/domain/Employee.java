@@ -5,6 +5,10 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.Optional;
 
 @Data
 @Entity
@@ -16,11 +20,14 @@ class Employee {
     Long id;
     private String name;
     private String position;
-    private String department;
     private Double salary;
 
+    @JsonIgnore
+    @OneToOne
+    private Department department;
 
-    public Employee(String name, String position, String department, double salary) {
+
+    public Employee(String name, String position, Department department, double salary) {
         this.name = name;
         this.position = position;
         this.department = department;
@@ -28,5 +35,9 @@ class Employee {
     }
 
     public Employee() {
+    }
+
+    public Optional<Long> getId() {
+        return Optional.ofNullable(this.id);
     }
 }

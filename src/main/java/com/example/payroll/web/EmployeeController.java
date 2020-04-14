@@ -1,20 +1,19 @@
 package com.example.payroll.web;
 
 import com.example.payroll.domain.Employee;
+import com.example.payroll.domain.EmployeeWithDepartment;
 import com.example.payroll.exception.EmployeeNotFoundException;
 import com.example.payroll.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import java.util.stream.StreamSupport;
 
 @RestController
 @Slf4j
@@ -22,25 +21,30 @@ class EmployeeController {
 
     private final EmployeeRepository repository;
     private final EmployeeResourceAssembler assembler;
+    private final EmployeeWithDepartmentResourceAssembler employeeWithDepartmentResourceAssembler;
 
     @Autowired
-    EmployeeController(EmployeeRepository repository, EmployeeResourceAssembler assembler) {
+    EmployeeController(EmployeeRepository repository, EmployeeResourceAssembler assembler, EmployeeWithDepartmentResourceAssembler employeeWithDepartmentResourceAssembler) {
 
         this.repository = repository;
         this.assembler = assembler;
+        this.employeeWithDepartmentResourceAssembler = employeeWithDepartmentResourceAssembler;
     }
 
-    // Aggregate root
-
     @GetMapping("/employees")
-    CollectionModel<EntityModel<Employee>> all() {
+    public ResponseEntity<CollectionModel<EntityModel<Employee>>> findAll() {
 
-        List<EntityModel<Employee>> employees = repository.findAll().stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
+        return ResponseEntity.ok(assembler.toCollectionModel(repository.findAll()));
 
-        return new CollectionModel<>(employees,
-                linkTo(methodOn(EmployeeController.class).all()).withSelfRel());
+    }
+
+    @GetMapping("/employees/{id}")
+    public ResponseEntity<EntityModel<Employee>> findOne(@PathVariable long id) {
+
+        return repository.findById(id) //
+                .map(assembler::toModel) //
+                .map(ResponseEntity::ok) //
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/employees")
@@ -48,15 +52,30 @@ class EmployeeController {
         return repository.save(newEmployee);
     }
 
-    // Single item
+    @GetMapping("/departments/{id}/employees")
+    public ResponseEntity<CollectionModel<EntityModel<Employee>>> findEmployees(@PathVariable long id) {
 
-    @GetMapping("/employees/{id}")
-    EntityModel<Employee> one(@PathVariable Long id) {
+        return ResponseEntity.ok(assembler.toCollectionModel(repository.findByDepartmentId(id)));
+    }
 
-        Employee employee = repository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
+    @GetMapping("/employees/detailed")
+    public ResponseEntity<CollectionModel<EntityModel<EmployeeWithDepartment>>> findAllDetailedEmployees() {
 
-        return assembler.toModel(employee);
+        return ResponseEntity.ok( //
+                employeeWithDepartmentResourceAssembler.toCollectionModel( //
+                        StreamSupport.stream(repository.findAll().spliterator(), false) //
+                                .map(EmployeeWithDepartment::new) //
+                                .collect(Collectors.toList())));
+    }
+
+    @GetMapping("/employees/{id}/detailed")
+    public ResponseEntity<EntityModel<EmployeeWithDepartment>> findDetailedEmployee(@PathVariable Long id) {
+
+        return repository.findById(id) //
+                .map(EmployeeWithDepartment::new) //
+                .map(employeeWithDepartmentResourceAssembler::toModel) //
+                .map(ResponseEntity::ok) //
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // CUSTOM SALARY GET

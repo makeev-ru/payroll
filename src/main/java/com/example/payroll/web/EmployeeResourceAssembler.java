@@ -1,20 +1,40 @@
 package com.example.payroll.web;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
 import com.example.payroll.domain.Employee;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.hateoas.SimpleIdentifiableRepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Component
-class EmployeeResourceAssembler implements RepresentationModelAssembler<Employee, EntityModel<Employee>> {
+class EmployeeResourceAssembler extends SimpleIdentifiableRepresentationModelAssembler<Employee> {
 
-	@Override
-	public EntityModel<Employee> toModel(Employee employee) {
+    EmployeeResourceAssembler() {
+        super(EmployeeController.class);
+    }
 
-		return new EntityModel<>(employee,
-				linkTo(methodOn(EmployeeController.class).one(employee.getId())).withSelfRel(),
-				linkTo(methodOn(EmployeeController.class).all()).withRel("employees"));
-	}
+    @Override
+    public void addLinks(EntityModel<Employee> resource) {
+
+        super.addLinks(resource);
+
+        resource.getContent().getId() //
+                .ifPresent(id -> { //
+                    resource.add(linkTo(methodOn(DepartmentController.class).findDepartment(id)).withRel("department"));
+                    resource.add(linkTo(methodOn(EmployeeController.class).findDetailedEmployee(id)).withRel("detailed"));
+                });
+    }
+
+    @Override
+    public void addLinks(CollectionModel<EntityModel<Employee>> resources) {
+
+        super.addLinks(resources);
+
+        resources.add(linkTo(methodOn(EmployeeController.class).findAllDetailedEmployees()).withRel("detailedEmployees"));
+        resources.add(linkTo(methodOn(DepartmentController.class).findAll()).withRel("departments"));
+//        resources.add(linkTo(methodOn(RootController.class).root()).withRel("root"));
+    }
 }
