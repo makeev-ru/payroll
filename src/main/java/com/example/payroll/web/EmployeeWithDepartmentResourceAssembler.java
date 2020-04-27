@@ -26,7 +26,6 @@ class EmployeeWithDepartmentResourceAssembler implements SimpleRepresentationMod
 
         resources.add(linkTo(methodOn(EmployeeController.class).findAllDetailedEmployees()).withSelfRel());
         resources.add(linkTo(methodOn(EmployeeController.class).findAll()).withRel("employees"));
-        resources.add(linkTo(methodOn(DepartmentController.class).findAll()).withRel("managers"));
-//		resources.add(linkTo(methodOn(RootController.class).root()).withRel("root"));
+        resources.add(linkTo(methodOn(DepartmentController.class).findAll()).withRel("departments"));
     }
 }

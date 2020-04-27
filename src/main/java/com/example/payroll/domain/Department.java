@@ -1,18 +1,16 @@
 package com.example.payroll.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Data
 @Entity
@@ -22,6 +20,7 @@ public class Department {
     @Id
     @GeneratedValue
     private Long id;
+    @GeneratedValue
     private String name;
 
     @JsonIgnore //
@@ -34,5 +33,10 @@ public class Department {
 
     public Optional<Long> getId() {
         return Optional.ofNullable(this.id);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

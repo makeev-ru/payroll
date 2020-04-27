@@ -4,6 +4,7 @@ import com.example.payroll.domain.Employee;
 import com.example.payroll.domain.EmployeeWithDepartment;
 import com.example.payroll.exception.EmployeeNotFoundException;
 import com.example.payroll.repository.EmployeeRepository;
+import com.example.payroll.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -22,13 +23,15 @@ class EmployeeController {
     private final EmployeeRepository repository;
     private final EmployeeResourceAssembler assembler;
     private final EmployeeWithDepartmentResourceAssembler employeeWithDepartmentResourceAssembler;
+    private final EmployeeService employeeService;
 
     @Autowired
-    EmployeeController(EmployeeRepository repository, EmployeeResourceAssembler assembler, EmployeeWithDepartmentResourceAssembler employeeWithDepartmentResourceAssembler) {
+    EmployeeController(EmployeeRepository repository, EmployeeResourceAssembler assembler, EmployeeWithDepartmentResourceAssembler employeeWithDepartmentResourceAssembler, EmployeeService employeeService) {
 
         this.repository = repository;
         this.assembler = assembler;
         this.employeeWithDepartmentResourceAssembler = employeeWithDepartmentResourceAssembler;
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/employees")
@@ -48,8 +51,12 @@ class EmployeeController {
     }
 
     @PostMapping("/employees")
-    Employee newEmployee(@RequestBody Employee newEmployee) {
-        return repository.save(newEmployee);
+    void newEmployee(@RequestBody EmployeeDto newEmployee) {
+        employeeService.createNew(
+                newEmployee.getName(),
+                newEmployee.getPosition(),
+                newEmployee.getDepartment(),
+                newEmployee.getSalary());
     }
 
     @GetMapping("/departments/{id}/employees")

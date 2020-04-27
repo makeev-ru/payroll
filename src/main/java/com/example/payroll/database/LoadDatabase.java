@@ -35,7 +35,7 @@ class LoadDatabase {
             //Development team
             Department development = departmentRepository.save(new Department("Development"));
 
-            Employee sam = employeeRepository.save(new Employee("Sam Boo", "Front-end developer", testing, 1500));
+            Employee sam = employeeRepository.save(new Employee("Sam Boo", "Front-end developer", development, 1500));
 
             development.setEmployees(Arrays.asList(sam));
 
