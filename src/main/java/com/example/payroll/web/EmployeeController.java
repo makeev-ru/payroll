@@ -85,7 +85,6 @@ class EmployeeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // CUSTOM SALARY GET
     @GetMapping("/employees/{id}/salary")
     public AbstractMap.SimpleEntry<String, Double> getSalary(@PathVariable Long id) {
 
