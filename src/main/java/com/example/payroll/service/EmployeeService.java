@@ -24,12 +24,12 @@ public class EmployeeService {
         this.departmentRepository = departmentRepository;
     }
 
-    public void createNew(String name, String position, String department, Double salary)
+    public Employee createNew(String name, String position, String department, Double salary)
             throws NoSuchElementException {
-        employeeRepository.save(new Employee(name, position, verifyDepartment(department), salary));
+        return employeeRepository.save(new Employee(name, position, verifyDepartment(department), salary));
     }
 
-    private Department verifyDepartment(String department) throws NoSuchElementException {
+    public Department verifyDepartment(String department) throws NoSuchElementException {
         return departmentRepository
                 .findByName(department)
                 .orElseThrow(() -> new NoSuchElementException("Department '" + department + "' does not exist"));
