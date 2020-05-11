@@ -9,12 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.AbstractMap;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RestController
 @Slf4j
@@ -38,7 +38,6 @@ class EmployeeController {
     public ResponseEntity<CollectionModel<EntityModel<Employee>>> findAll() {
 
         return ResponseEntity.ok(assembler.toCollectionModel(repository.findAll()));
-
     }
 
     @GetMapping("/employees/{id}")
@@ -51,6 +50,7 @@ class EmployeeController {
     }
 
     @PostMapping("/employees")
+    @ResponseStatus(HttpStatus.CREATED)
     void newEmployee(@RequestBody EmployeeDto newEmployee) {
         employeeService.createNew(
                 newEmployee.getName(),
@@ -70,7 +70,7 @@ class EmployeeController {
 
         return ResponseEntity.ok( //
                 employeeWithDepartmentResourceAssembler.toCollectionModel( //
-                        StreamSupport.stream(repository.findAll().spliterator(), false) //
+                        repository.findAll().stream() //
                                 .map(EmployeeWithDepartment::new) //
                                 .collect(Collectors.toList())));
     }

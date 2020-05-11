@@ -3,7 +3,6 @@ package com.example.payroll.service;
 import com.example.payroll.domain.Department;
 import com.example.payroll.domain.Employee;
 import com.example.payroll.repository.DepartmentRepository;
-import com.example.payroll.repository.EmployeeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,8 +36,6 @@ public class EmployeeServiceIntegrationTest {
     @Autowired
     private EmployeeService service;
     @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
     private DepartmentRepository departmentRepository;
 
     @Test
@@ -55,9 +52,7 @@ public class EmployeeServiceIntegrationTest {
     @Test
     @DisplayName("Create new Employee: Department exception")
     public void createNewEmployeeDepartmentException() {
-        Throwable thrown = assertThrows(NoSuchElementException.class, () -> {
-            service.createNew(NAME, POSITION, NONEXISTENT_DEPARTMENT, SALARY);
-        });
+        Throwable thrown = assertThrows(NoSuchElementException.class, () -> service.createNew(NAME, POSITION, NONEXISTENT_DEPARTMENT, SALARY));
         assertThat(thrown.getMessage(), is(equalTo(NONEXISTENT_DEPARTMENT_EXCEPTION)));
     }
 
@@ -72,9 +67,7 @@ public class EmployeeServiceIntegrationTest {
     @Test
     @DisplayName("Non existent Department exception")
     public void verifyDepartmentException() {
-        Throwable thrown = assertThrows(NoSuchElementException.class, () -> {
-            service.verifyDepartment(NONEXISTENT_DEPARTMENT);
-        });
+        Throwable thrown = assertThrows(NoSuchElementException.class, () -> service.verifyDepartment(NONEXISTENT_DEPARTMENT));
         assertThat(thrown.getMessage(), is(equalTo(NONEXISTENT_DEPARTMENT_EXCEPTION)));
     }
 }

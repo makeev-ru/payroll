@@ -5,7 +5,6 @@ import com.example.payroll.domain.Employee;
 import com.example.payroll.repository.DepartmentRepository;
 import com.example.payroll.repository.EmployeeRepository;
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -59,8 +58,11 @@ class EmployeeServiceTest {
                 .thenReturn(Collections.singletonList(employeeMock));
     }
 
-    /** Verifies the invocation of dependencies and verifies the captured parameter values. */
+    /**
+     * Verifies the invocation of dependencies and verifies the captured parameter values.
+     */
     @Test
+    @DisplayName("Create new Employee")
     void createNew() {
         // prepare to capture a Employee Object
         ArgumentCaptor<Employee> employeeCaptor = ArgumentCaptor.forClass(Employee.class);
