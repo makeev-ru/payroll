@@ -1,12 +1,12 @@
 version: "3.7"
 services:
-  api-test:
+  payroll-api-tests:
     image: tad0ckerid/payroll-api-tests:1.0
     depends_on:
-      - payroll
+      - payroll-app
     # run the api tests
     command: mvn clean install
-  payroll:
+  payroll-app:
     image: tad0ckerid/payroll-app:latest
   lb:
     build: ./container-chat-lb-example
@@ -18,5 +18,3 @@ services:
       - 8080:8080
     # run the api
     command: mvn spring-boot:run
-
-
