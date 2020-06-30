@@ -1,8 +1,6 @@
 sudo: required
-services:
-  - docker
-script:
-  - docker build -t payroll-app .
+services: docker
+script: docker build -t payroll-app .
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - docker tag payroll-app $DOCKER_USER/payroll-app:$TRAVIS_BUILD_NUMBER
