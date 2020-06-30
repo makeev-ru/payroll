@@ -1,13 +1,17 @@
 version: "3.7"
 services:
-  payroll-api-tests:
+  api-test:
     image: tad0ckerid/payroll-api-tests:1.0
+    network_mode: host
     depends_on:
-      - payroll-app
+      - payroll
     # run the api tests
+    environment:
+      WAIT_HOSTS: payroll:8080
     command: mvn clean install
-  payroll-app:
+  payroll:
     image: tad0ckerid/payroll-app:latest
+    # bind the ports
     ports:
       - 8080:8080
     # run the api
