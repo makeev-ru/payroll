@@ -8,12 +8,6 @@ services:
     command: mvn clean install
   payroll-app:
     image: tad0ckerid/payroll-app:latest
-  lb:
-    build: ./container-chat-lb-example
-    depends_on:
-      - payroll-app
-      - payroll-api-tests
-      # bind the ports
     ports:
       - 8080:8080
     # run the api
