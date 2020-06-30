@@ -1,10 +1,21 @@
 sudo: required
-services: docker
-script: docker build -t payroll-app .
-after_success:
+services:
+  - docker
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+before_script:
+  - docker build -t payroll-app .
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - docker tag payroll-app $DOCKER_USER/payroll-app:$TRAVIS_BUILD_NUMBER
   - docker push $DOCKER_USER/payroll-app:$TRAVIS_BUILD_NUMBER
   - docker tag payroll-app $DOCKER_USER/payroll-app:latest
   - docker push $DOCKER_USER/payroll-app:latest
-  - docker-compose up
+
+script:
+  - docker-compose up -d
+
+after_script:
+  - docker-compose down

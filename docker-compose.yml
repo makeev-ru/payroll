@@ -7,7 +7,7 @@ services:
     # run the api tests
     command: mvn clean install
   payroll:
-    image: tad0ckerid/payroll-app:1.0
+    image: tad0ckerid/payroll-app:latest
   lb:
     build: ./container-chat-lb-example
     depends_on:
