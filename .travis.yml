@@ -7,3 +7,5 @@ after_success:
   - docker push $DOCKER_USER/payroll-app:$TRAVIS_BUILD_NUMBER
   - docker tag payroll-app $DOCKER_USER/payroll-app:latest
   - docker push $DOCKER_USER/payroll-app:latest
+  - docker-compose up -d
+  - docker-compose stop
