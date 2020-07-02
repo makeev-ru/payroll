@@ -7,12 +7,12 @@ services:
       - payroll
     # run the api tests
     environment:
-      WAIT_HOSTS: payroll:80
+      WAIT_HOSTS: payroll:8080
     command: mvn clean install
   payroll:
     image: tad0ckerid/payroll-app:latest
     # bind the ports
     ports:
-      - "80:80"
+      - 8080:8080
     # run the api
     command: mvn spring-boot:run
