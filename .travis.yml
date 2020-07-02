@@ -22,4 +22,5 @@ after_success:
   - docker tag payroll-api-tests $DOCKER_USER/payroll-api-tests:latest
   - docker push $DOCKER_USER/payroll-api-tests:latest
 after_script:
+  - docker stop payroll-app
   - docker-compose down
