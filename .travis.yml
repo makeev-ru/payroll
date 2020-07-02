@@ -16,8 +16,8 @@ before_install:
 
 script:
   - docker-compose up -d
-after_success:
-  - docker-compose down
+#after_success:
+#  - docker-compose down
 
 #after_success:
 #  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
