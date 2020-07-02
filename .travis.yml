@@ -14,16 +14,12 @@ env:
 before_install:
   - chmod +x mvnw
 
-script: docker-compose up --exit-code-from payroll
-#  - docker-compose up -d
-#  - docker-compose -f api-test.yml run api-test
-#  - rc=$?
-#  - docker-compose down
-#  - exit $rc
+script:
+  - docker-compose up --exit-code-from payroll
 
-#after_success:
-#  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-#  - docker tag payroll-api-tests $DOCKER_USER/payroll-api-tests:$TRAVIS_BUILD_NUMBER
-#  - docker push $DOCKER_USER/payroll-api-tests:$TRAVIS_BUILD_NUMBER
-#  - docker tag payroll-api-tests $DOCKER_USER/payroll-api-tests:latest
-#  - docker push $DOCKER_USER/payroll-api-tests:latest
+after_success:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  - docker tag payroll-api-tests $DOCKER_USER/payroll-api-tests:$TRAVIS_BUILD_NUMBER
+  - docker push $DOCKER_USER/payroll-api-tests:$TRAVIS_BUILD_NUMBER
+  - docker tag payroll-api-tests $DOCKER_USER/payroll-api-tests:latest
+  - docker push $DOCKER_USER/payroll-api-tests:latest
