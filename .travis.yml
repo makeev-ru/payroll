@@ -15,12 +15,12 @@ before_install:
   - chmod +x mvnw
 script:
   - docker-compose up
+after_script:
+  - docker stop payroll-app
+  - docker-compose down
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - docker tag payroll-api-tests $DOCKER_USER/payroll-api-tests:$TRAVIS_BUILD_NUMBER
   - docker push $DOCKER_USER/payroll-api-tests:$TRAVIS_BUILD_NUMBER
   - docker tag payroll-api-tests $DOCKER_USER/payroll-api-tests:latest
   - docker push $DOCKER_USER/payroll-api-tests:latest
-after_script:
-  - docker stop payroll-app
-  - docker-compose down

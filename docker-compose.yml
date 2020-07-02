@@ -17,3 +17,5 @@ services:
       - 8080:8080
     # run the api
     command: mvn spring-boot:run
+after_success:
+  - docker stop payroll-app
