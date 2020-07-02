@@ -13,17 +13,12 @@ env:
   - DOCKER_COMPOSE_VERSION=1.4.2
 before_install:
   - chmod +x mvnw
-install:
-  # place apparmor docker profile in complain mode
-  # to workaround https://github.com/travis-ci/travis-ci/issues/4661
-  - sudo apt-get -y update
-  - sudo apt-get -y install apparmor-utils
-  - sudo aa-complain /etc/apparmor.d/docker
+
 script:
-  - docker-compose up
+  - docker-compose up -d
 after_script:
-  - docker stop payroll-app
   - docker-compose down
+
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - docker tag payroll-api-tests $DOCKER_USER/payroll-api-tests:$TRAVIS_BUILD_NUMBER
