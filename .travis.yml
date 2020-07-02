@@ -15,7 +15,7 @@ before_install:
   - chmod +x mvnw
 
 script:
-  - docker-compose up -d
+  - docker-compose up
 #after_success:
 #  - docker-compose down
 
