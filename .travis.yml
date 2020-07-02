@@ -11,7 +11,8 @@ services:
   - docker
 env:
   - DOCKER_COMPOSE_VERSION=1.4.2
-
+before_install:
+  - chmod +x mvnw
 script:
   - docker-compose up
 
