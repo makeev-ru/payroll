@@ -16,8 +16,8 @@ before_install:
 
 script:
   - docker-compose up
-after_scripy:
-  - docker-compose stop
+after_script:
+  - docker-compose stop payroll-app
 
 #after_success:
 #  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
