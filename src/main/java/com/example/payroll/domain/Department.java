@@ -1,7 +1,6 @@
 package com.example.payroll.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Data
 @Entity
 @NoArgsConstructor
 public class Department {
@@ -22,6 +20,22 @@ public class Department {
     private Long id;
     @GeneratedValue
     private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
 
     @JsonIgnore //
     @OneToMany(mappedBy = "department") //

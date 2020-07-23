@@ -9,7 +9,7 @@ import lombok.Value;
 public class EmployeeWithDepartment {
 
     @JsonIgnore
-    private final Employee employee;
+    private Employee employee;
 
     public Long getId() {
 

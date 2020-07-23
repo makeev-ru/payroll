@@ -1,18 +1,15 @@
 package com.example.payroll.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import java.util.Optional;
 
-@Data
 @Entity
-public
-class Employee {
+public class Employee {
 
     private @Id
     @GeneratedValue
@@ -21,8 +18,44 @@ class Employee {
     private String position;
     private Double salary;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
     @JsonIgnore
-    @OneToOne
+    @ManyToOne
     private Department department;
 
 
